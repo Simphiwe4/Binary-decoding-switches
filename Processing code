@@ -1,0 +1,203 @@
+import processing.serial.*;
+Serial myPort;
+int ledCl=#808080;
+int ledCl2=ledCl;
+int ledCl3=ledCl;
+int ledCl4=ledCl;
+String ledTxt="OFF";
+String ledTxt2="OFF";
+String ledTxt3="OFF";
+String ledTxt4="OFF";
+String dIndicator="Decimal";
+String data="";
+int dcm = 0;
+int btnState1 = 0;
+int btnState2 = 0;
+int btnState3 = 0;
+int btnState4 = 0;
+void setup()
+{
+  myPort = new Serial(this,Serial.list()[0],115200);//setup serial port
+  myPort.bufferUntil('\n');//read until you reach the newline
+  size(650,195);
+  background(#307DED);
+}
+
+void draw()
+{
+noStroke();
+  
+  //led1
+fill(#FFFFFF);
+rect(45,20,100,20);
+fill(#000000);
+text(ledTxt,50,35);
+fill(ledCl);
+ellipse(100,100,100,100);
+
+//led2
+fill(#FFFFFF);
+rect(195,20,100,20);
+fill(#000000);
+text(ledTxt2,200,35);
+fill(ledCl2);
+ellipse(250,100,100,100);
+
+//led3
+fill(#FFFFFF);
+rect(345,20,100,20);
+fill(#000000);
+text(ledTxt3,350,35);
+fill(ledCl3);
+ellipse(400,100,100,100);
+
+
+//led4
+fill(#FFFFFF);
+rect(495,20,100,20);
+fill(#000000);
+
+text(ledTxt4,500,35);
+fill(ledCl4);
+ellipse(550,100,100,100);
+
+
+//Decimal indicator
+fill(#FFFFFF);
+rect(45,165,100,20);
+fill(#000000);
+text("Decimal : ",50,180);
+text(dcm,100,180);
+
+}
+
+void serialEvent(Serial p)//while theres data in the buffer 
+{
+  data = myPort.readString();//Reads a string of characters from the serial port represented by myPort object assigning it to data
+ //data="x,x,x,x\n"
+  
+  if (data != null)// if data is not empty
+  { 
+      data = trim(data);//trimming data/Removes the whitespace (newline character '/n') leaving a string of "x,x,x,x"
+      int[] val = int(split(data, ','));// data is split using ',' as a delimiter which converts the data into an array of integers storing them into an array val[]=["x","x","x","x"]
+      if (val.length == 4) //same as for loop function
+      {
+        btnState1 = val[0]; 
+        btnState2 = val[1]; 
+        btnState3 = val[2]; 
+        btnState4 = val[3];
+      }
+      
+  }
+// LED/Button inputs
+  if(btnState1 == 1)//if high
+    {
+      ledCl = #FF0000;
+      ledTxt = "ON";
+    }
+  else if(btnState1 == 0)//if low
+    {
+      ledCl=#808080;
+      ledTxt = "OFF";
+    }
+    
+  if(btnState2 == 1)
+    {
+      ledCl2 = #FF0000;
+      ledTxt2 = "ON";
+    }
+   else if(btnState2 == 0)
+    {
+      ledCl2 = #808080;
+      ledTxt2 = "OFF";
+    }
+    
+  if(btnState3 == 1)
+    {
+      ledCl3 = #FF0000;
+      ledTxt3 = "ON";
+    }
+  else if(btnState3 == 0)
+    {
+      ledCl3 = #808080;
+      ledTxt3 = "OFF";
+    }
+
+  if(btnState4 == 1)
+    {
+      ledCl4 = #FF0000;
+      ledTxt4 = "ON";
+    }
+  else if(btnState4 == 0)
+    {
+       ledCl4 =#808080;
+       ledTxt4 = "OFF";
+    }
+    
+    //Decoder
+    if(btnState1 == 0 && btnState2 == 0 && btnState3 == 0 && btnState4 == 0)
+      {
+        dcm = 0;
+      }
+    else if(btnState1 == 0 && btnState2 == 0 && btnState3 == 0 && btnState4 == 1)
+      {
+        dcm = 1;
+      }
+    else if(btnState1 == 0 && btnState2 == 0 && btnState3 == 1 && btnState4 == 0)
+      {
+        dcm = 2 ;
+      }
+     else if(btnState1 == 0 && btnState2 == 0 && btnState3 == 1 && btnState4 == 1)
+      {
+        dcm = 3;
+      }
+    else if(btnState1 == 0 && btnState2 == 1 && btnState3 == 0 && btnState4 == 0)
+      {
+        dcm = 4;
+      }
+    else if(btnState1 == 0 && btnState2 == 1 && btnState3 == 0 && btnState4 == 1)
+      {
+        dcm = 5;
+      }
+    else if(btnState1 == 0 && btnState2 == 1 && btnState3 == 1 && btnState4 == 0)
+      {
+        dcm = 6;
+      }
+    else if(btnState1 == 0 && btnState2 == 1 && btnState3 == 1 && btnState4 == 1)
+      {
+        dcm = 7;
+      }
+    else if(btnState1 == 1 && btnState2 == 0 && btnState3 == 0 && btnState4 == 0)
+      {
+        dcm = 8;
+      }
+    else if(btnState1 == 1 && btnState2 == 0 && btnState3 == 0 && btnState4 == 1)
+      {
+        dcm = 9 ;
+      }
+    else if(btnState1 == 1 && btnState2 == 0 && btnState3 == 1 && btnState4 == 0)
+      {
+        dcm = 10 ;
+      }
+    else if(btnState1 == 1 && btnState2 == 0 && btnState3 == 1 && btnState4 == 1)
+      {
+        dcm = 11 ;
+      }
+    else if(btnState1 == 1 && btnState2 == 1 && btnState3 == 0 && btnState4 == 0)
+      {
+        dcm = 12 ;
+      }
+    else if(btnState1 == 1 && btnState2 == 1 && btnState3 == 0 && btnState4 == 1)
+      {
+        dcm = 13 ;
+      }
+    else if(btnState1 == 1 && btnState2 == 1 && btnState3 == 1 && btnState4 == 0)
+      {
+        dcm = 14 ;
+      }
+     else if(btnState1 == 1 && btnState2 == 1 && btnState3 == 1 && btnState4 == 1)
+      {
+        dcm = 15 ;
+      }
+}
+ 
