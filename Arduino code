@@ -1,0 +1,35 @@
+const int btnPin1=15;
+const int btnPin2=4;
+const int btnPin3=18;
+const int btnPin4=19;
+int btnState1=0;
+int btnState2=0;
+int btnState3=0;
+int btnState4=0;
+void setup()
+{
+  Serial.begin(115200);
+  pinMode(btnPin1,INPUT);//setting pin 15 as an input
+  pinMode(btnPin2,INPUT);//setting pin 4 as an input
+  pinMode(btnPin3,INPUT);//setting pin 18 as an input
+  pinMode(btnPin4,INPUT);//setting pin 19 as an input
+}
+
+void loop() 
+{ 
+  btnState1 = digitalRead(btnPin1);//read button input assingning a state
+  btnState2 = digitalRead(btnPin2);//read button input assingning a state
+  btnState3 = digitalRead(btnPin3);//read button input assingning a state
+  btnState4 = digitalRead(btnPin4);//read button input assingning a state
+
+  //Sending data to the serial port
+  Serial.print(btnState1);
+  Serial.print(",");
+  Serial.print(btnState2);
+  Serial.print(",");
+  Serial.print(btnState3);
+  Serial.print(",");
+  Serial.println(btnState4);//sending with a newline charaacter
+
+  delay(10);// delay to prevent flooding the serial port with data
+}
